@@ -1,6 +1,7 @@
-﻿using HR.Infrastructure.Initializers.Custom.MsSqlServer;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurant.Back.Infrastructure.Initializers.Common;
+using Restaurant.Back.Infrastructure.Initializers.Custom.MsSqlServer;
 //using HR.Infrastructure.Initializers.Custom.MySql;
 
 
