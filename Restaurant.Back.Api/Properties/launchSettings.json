@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/Category",
+      "launchUrl": "api/Ingredient",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "Restaurant.Back.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/Category",
+      "launchUrl": "api/Ingredient",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
