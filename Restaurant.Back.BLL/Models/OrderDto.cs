@@ -13,12 +13,7 @@ namespace Restaurant.Back.BLL.Models
         public string CustomerAddress { get; set; }
         public string Comment { get; set; }
 
-        public List<OrderPositionDto> OrderPosition { get; set; }
-
-        // Don't show in web api.
-        public List<OrderStatusDto> OrderStatus { get; set; }
-
-        // Load in web api.
+        public List<OrderPositionDto> OrderPosition { get; set; }        
         public List<StatusDto> Statuses { get; set; }
     }
 }

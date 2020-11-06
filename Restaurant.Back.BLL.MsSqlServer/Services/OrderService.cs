@@ -7,6 +7,7 @@ using Restaurant.Back.DAL.MsSqlServer.Models;
 using Restaurant.Back.Repository.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Restaurant.Back.BLL.MsSqlServer.Services
@@ -23,10 +24,14 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
             (
                 ce =>
                 {
-                    ce.CreateMap<Order, OrderDto>().ReverseMap();
-                    ce.CreateMap<OrderPosition, OrderPositionDto>().ReverseMap();
+                    ce.CreateMap<Status, StatusDto>().ReverseMap();                    
                     ce.CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
-
+                    ce.CreateMap<Order, OrderDto>()
+                        .ForMember(item => item.Statuses, opt => opt.MapFrom
+                            (
+                                p => p.OrderStatus.Select(pi => pi.Status)
+                            ));
+                    ce.CreateMap<OrderDto, Order>();
 
                     ce.AddExpressionMapping();
                 }

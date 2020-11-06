@@ -25,11 +25,6 @@ namespace Restaurant.Back.DAL.MsSqlServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=193.151.56.100,51433;Initial Catalog=RestaurantBack;User Id=makhlin;Password=Init1234;");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
