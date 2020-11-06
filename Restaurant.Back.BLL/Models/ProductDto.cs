@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Restaurant.Back.BLL.Models
 {
@@ -13,12 +15,11 @@ namespace Restaurant.Back.BLL.Models
         public int CategoryId { get; set; }
         public bool IsEnabled { get; set; }
 
-        public CategoryDto CategoryDto { get; set; }
+        public CategoryDto Category { get; set; }
 
-        // Don't show in web api.
-        public List<ProductIngredientDto> ProductIngredients { get; set; }
+        [JsonIgnore]
+        public List<ProductIngredientDto> ProductIngredient { get; set; }
 
-        // Load in web api.
         public List<IngredientDto> Ingredients { get; set; }
     }
 }

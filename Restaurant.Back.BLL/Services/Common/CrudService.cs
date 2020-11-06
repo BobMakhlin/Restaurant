@@ -45,6 +45,7 @@ namespace Restaurant.Back.BLL.Services.Common
         {
             var collection = m_repository
                 .GetAll()
+                //.ProjectTo<TDtoElement>(m_mapper.ConfigurationProvider);
                 .Select(item => m_mapper.Map<TDtoElement>(item));
 
             return collection;
