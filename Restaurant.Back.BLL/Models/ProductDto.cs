@@ -17,9 +17,6 @@ namespace Restaurant.Back.BLL.Models
 
         public CategoryDto Category { get; set; }
 
-        [JsonIgnore]
-        public List<ProductIngredientDto> ProductIngredient { get; set; }
-
         public List<IngredientDto> Ingredients { get; set; }
     }
 }

@@ -77,8 +77,13 @@ namespace Restaurant.Back.Api.Controllers
             {
                 var insertedProduct = await m_productsService.AddAsync(product);
 
+
                 var productsHelper = new ProductIngredientHelper(m_productIngredientService);
                 await productsHelper.AddIngredientsAsync(insertedProduct.Id, product.Ingredients);
+
+
+                var targetProduct = await m_productsService.GetAsync(insertedProduct.Id);
+
 
 
                 transaction.Complete();
@@ -87,11 +92,11 @@ namespace Restaurant.Back.Api.Controllers
                 return CreatedAtAction
                 (
                     nameof(GetProduct),
-                    new { id = insertedProduct.Id },
-                    insertedProduct
+                    new { id = targetProduct.Id },
+                    targetProduct
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -118,15 +123,16 @@ namespace Restaurant.Back.Api.Controllers
 
 
                 var productsHelper = new ProductIngredientHelper(m_productIngredientService);
-
                 await productsHelper.DeleteIngredientsAsync(product.Id);
                 await productsHelper.AddIngredientsAsync(product.Id, product.Ingredients);
+
+                var targetProduct = await m_productsService.GetAsync(product.Id);
 
 
                 transaction.Complete();
 
                 
-                return Ok(product);
+                return Ok(targetProduct);
             }
             catch (Exception)
             {
