@@ -43,7 +43,7 @@ namespace Restaurant.Back.Api.Controllers
                 var orders = await m_ordersService.GetAll().ToListAsync();
                 return Ok(orders);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }

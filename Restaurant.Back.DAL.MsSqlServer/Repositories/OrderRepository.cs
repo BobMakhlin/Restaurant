@@ -17,7 +17,11 @@ namespace Restaurant.Back.DAL.MsSqlServer.Repositories
         }
 
         private IQueryable<Order> GetOrders() => m_table
-            .Include(item => item.OrderStatus).ThenInclude(item => item.Status);
+            .Include(item => item.OrderPosition)
+                .ThenInclude(item => item.Product)
+
+            .Include(item => item.OrderStatus)
+                .ThenInclude(item => item.Status);
 
 
         public override IQueryable<Order> GetAll()

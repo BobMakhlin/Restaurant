@@ -1,4 +1,6 @@
-﻿using Restaurant.Back.BLL.Models;
+﻿using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
+using Restaurant.Back.BLL.Models;
 using Restaurant.Back.BLL.Services.Common;
 using Restaurant.Back.DAL.MsSqlServer.Models;
 using Restaurant.Back.Repository.Common;
@@ -12,6 +14,22 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
     {
         public OrderPositionService(ICrudRepository<OrderPosition, int> repository) : base(repository)
         {
+        }
+
+        protected override IMapper GetMapper()
+        {
+            var mapperConfig = new MapperConfiguration
+            (
+                ce =>
+                {
+                    ce.CreateMap<OrderPosition, OrderPositionDto>().ReverseMap();
+                    ce.CreateMap<Product, ProductDto>().ReverseMap();
+
+                    ce.AddExpressionMapping();
+                }
+            );
+
+            return new Mapper(mapperConfig);
         }
     }
 }
