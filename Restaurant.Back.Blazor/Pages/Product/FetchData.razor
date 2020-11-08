@@ -1,0 +1,87 @@
+﻿@page "/product"
+
+@inject HttpClient HttpClient
+
+
+<h3>Products</h3>
+
+<a class="btn btn-success" href="product/create">
+    <i class="oi oi-plus"></i>
+    <span class="ml-2">Create New</span>
+</a>
+
+<br />
+
+
+<div class="mt-5">
+
+    @if (Products == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (Products.Count == 0)
+    {
+        <p>No Records Found.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Weight</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Enabled</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Products)
+                {
+                    var description = item.Description ?? "None";
+                    var categoryName = item?.Category.Title ?? "None";
+
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.Weight</td>
+                        <td>@item.Price</td>
+                        <td>@categoryName</td>
+                        <td>
+                            <input type="checkbox" checked="@item.IsEnabled" @onchange="args => OnCheckboxValueChanged(item, args)" />
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="product/edit/@item.Id">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
+
+
+@code
+{
+    List<ProductPoco> Products { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await HttpClient
+            .GetFromJsonAsync<List<ProductPoco>>(Urls.BackApiProduct);
+    }
+
+
+    private async Task OnCheckboxValueChanged(ProductPoco product, ChangeEventArgs args)
+    {
+        var checkboxValue = (bool)args.Value;
+        product.IsEnabled = checkboxValue;
+
+        var url = $"{Urls.BackApiProduct}/{product.Id}";
+        await HttpClient.PutAsJsonAsync(url, product);
+    }
+}

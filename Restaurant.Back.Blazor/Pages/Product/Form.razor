@@ -1,0 +1,142 @@
+﻿<EditForm Model="@Product" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <div class="form-group">
+            <label for="title-input">Title</label>
+            <div>
+                <InputText id="title-input" class="form-control" @bind-Value="@Product.Title" />
+                <ValidationMessage For="@(() => Product.Title)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description-input">Description</label>
+            <div>
+                <InputText id="description-input" class="form-control" @bind-Value="@Product.Description" />
+                <ValidationMessage For="@(() => Product.Description)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="weight-input">Weight</label>
+            <div>
+                <InputNumber id="weight-input" class="form-control" @bind-Value="@Product.Weight" />
+                <ValidationMessage For="@(() => Product.Weight)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="price-input">Price</label>
+
+            <div>
+                <InputNumber id="price-input" class="form-control" @bind-Value="@Product.Price" />
+                <ValidationMessage For="@(() => Product.Price)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="category-input">Category</label>
+
+            <select id="category-input" class="form-control" @bind="@Product.CategoryId">
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.Id">@category.Title</option>
+                }
+            </select>
+        </div>
+    </div>
+
+
+    <div id="line-ingredients" class="mt-5 mb-5">
+        <h5>Ingredients</h5>
+
+        <div class="d-flex mt-3 mb-3">
+            <select @bind="@m_selectedIngredientId" class="form-control">
+                @foreach (var item in Ingredients)
+                {
+                    <option value=@item.Id>@item.Title</option>
+                }
+            </select>
+
+            <button type="button" @onclick="@AddIngredient" class="btn btn-primary ml-2 text-uppercase">Add</button>
+        </div>
+
+        @{
+            Console.WriteLine(Product.Ingredients.Count);
+            if (Product.Ingredients == null) { }
+            else if (Product.Ingredients.Count == 0)
+            {
+                <p>No ingredients ...</p>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Product.Ingredients)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Title</td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <button type="button" @onclick="@(() => DeleteIngredient(item))" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+
+
+
+    <button type="submit" class="btn btn-success mb-5">Save</button>
+</EditForm>
+
+
+@code {
+    private int m_selectedIngredientId;
+
+
+    [Parameter]
+    public List<CategoryPoco> Categories { get; set; }
+
+    [Parameter]
+    public List<IngredientPoco> Ingredients { get; set; }
+
+    [Parameter]
+    public ProductPoco Product { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        m_selectedIngredientId = Ingredients.First().Id;
+    }
+
+    private void AddIngredient()
+    {
+        var ingredient = Ingredients
+            .FirstOrDefault(item => item.Id == m_selectedIngredientId);
+
+        Product.Ingredients.Add(ingredient);
+    }
+    private void DeleteIngredient(IngredientPoco ingredient)
+    {
+        Product.Ingredients.Remove(ingredient);
+    }
+}
+

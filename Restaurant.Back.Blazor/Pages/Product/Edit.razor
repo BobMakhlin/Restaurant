@@ -1,0 +1,57 @@
+﻿@page "/product/edit/{id:int}"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+
+@{
+    if (IsPageLoaded())
+    {
+        <Form Product="@m_product" Categories="@m_categories" Ingredients="@m_ingredients" OnValidSubmit="@EditProductAsync" />
+    }
+    else
+    {
+        <Loading />
+    }
+
+}
+
+
+@code {
+    private ProductPoco m_product;
+    private List<CategoryPoco> m_categories;
+    private List<IngredientPoco> m_ingredients;
+
+
+    [Parameter]
+    public int Id { get; set; }
+
+
+    public async Task EditProductAsync()
+    {
+        m_product.Category = null;
+
+        var url = $"{Urls.BackApiProduct}/{Id}";
+        await HttpClient.PutAsJsonAsync(url, m_product);
+
+
+        NavigationManager.NavigateTo("product");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_product = await HttpClient.GetFromJsonAsync<ProductPoco>
+            ($"{Urls.BackApiProduct}/{Id}");
+
+        m_categories = await HttpClient.GetFromJsonAsync<List<CategoryPoco>>
+            ($"{Urls.BackApiCategory}");
+
+        m_ingredients = await HttpClient.GetFromJsonAsync<List<IngredientPoco>>
+            ($"{Urls.BackApiIngredient}");
+    }
+
+    private bool IsPageLoaded() =>
+        m_product != null
+        && m_categories != null
+        && m_ingredients != null;
+}
