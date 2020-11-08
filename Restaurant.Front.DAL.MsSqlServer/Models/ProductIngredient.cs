@@ -11,7 +11,6 @@ namespace Restaurant.Front.DAL.MsSqlServer.Models
         public int Id { get; set; }
         public int IngredientId { get; set; }
         public int ProductId { get; set; }
-        public int Amount { get; set; }
 
         [ForeignKey(nameof(IngredientId))]
         [InverseProperty("ProductIngredient")]

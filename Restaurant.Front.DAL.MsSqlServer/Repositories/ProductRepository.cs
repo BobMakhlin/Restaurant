@@ -21,7 +21,8 @@ namespace Restaurant.Front.DAL.MsSqlServer.Repositories
             .Include(item => item.ProductIngredient)
                 .ThenInclude(item => item.Ingredient)
             .Include(item => item.ProductLabel)
-                .ThenInclude(item => item.Label);
+                .ThenInclude(item => item.Label)
+            .Include(item => item.Category);
 
 
         public override IQueryable<Product> GetAll()

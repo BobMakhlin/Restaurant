@@ -19,19 +19,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Back.Api", "Rest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MsSqlServer", "MsSqlServer", "{E5D0E9BB-2B13-4EC9-A890-C74494548DA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.BLL", "Restaurant.Front.BLL\Restaurant.Front.BLL.csproj", "{093A9D3A-50CE-4862-9741-EF1545A3875D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.BLL", "Restaurant.Front.BLL\Restaurant.Front.BLL.csproj", "{093A9D3A-50CE-4862-9741-EF1545A3875D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.Infrastructure", "Restaurant.Front.Infrastructure\Restaurant.Front.Infrastructure.csproj", "{5F747E77-86BB-425A-B491-2353409DEE5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.Infrastructure", "Restaurant.Front.Infrastructure\Restaurant.Front.Infrastructure.csproj", "{5F747E77-86BB-425A-B491-2353409DEE5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.Repository", "Restaurant.Front.Repository\Restaurant.Front.Repository.csproj", "{DAAA2D0A-465F-4D13-9AE1-D2879B1B7B7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.Repository", "Restaurant.Front.Repository\Restaurant.Front.Repository.csproj", "{DAAA2D0A-465F-4D13-9AE1-D2879B1B7B7E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Back", "Back", "{DC579F68-3FBE-43AD-BDFB-AA769B47050A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Front", "Front", "{8BB86539-4E4A-409E-9473-C3F98869EBD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.BLL.MsSqlServer", "Restaurant.Front.BLL.MsSqlServer\Restaurant.Front.BLL.MsSqlServer.csproj", "{D185AE16-80C1-4335-AAE6-C17EE8FE4D70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.BLL.MsSqlServer", "Restaurant.Front.BLL.MsSqlServer\Restaurant.Front.BLL.MsSqlServer.csproj", "{D185AE16-80C1-4335-AAE6-C17EE8FE4D70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.DAL.MsSqlServer", "Restaurant.Front.DAL.MsSqlServer\Restaurant.Front.DAL.MsSqlServer.csproj", "{475EB1B1-AA45-4A7E-9079-B7226D2A110B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.DAL.MsSqlServer", "Restaurant.Front.DAL.MsSqlServer\Restaurant.Front.DAL.MsSqlServer.csproj", "{475EB1B1-AA45-4A7E-9079-B7226D2A110B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.Api", "Restaurant.Front.Api\Restaurant.Front.Api.csproj", "{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{475EB1B1-AA45-4A7E-9079-B7226D2A110B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{475EB1B1-AA45-4A7E-9079-B7226D2A110B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{475EB1B1-AA45-4A7E-9079-B7226D2A110B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{DAAA2D0A-465F-4D13-9AE1-D2879B1B7B7E} = {8BB86539-4E4A-409E-9473-C3F98869EBD3}
 		{D185AE16-80C1-4335-AAE6-C17EE8FE4D70} = {E5D0E9BB-2B13-4EC9-A890-C74494548DA3}
 		{475EB1B1-AA45-4A7E-9079-B7226D2A110B} = {E5D0E9BB-2B13-4EC9-A890-C74494548DA3}
+		{10B75081-CD81-4EF0-A32C-0F79F60E2FF1} = {8BB86539-4E4A-409E-9473-C3F98869EBD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5264718A-3B79-40BE-ADE4-4AA864397B25}
