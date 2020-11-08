@@ -1,0 +1,30 @@
+﻿@page "/category/edit/{id:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+
+<h3>Edit</h3>
+
+<Form ButtonText="Update" category="Category"
+      OnValidSubmit="@UpdateCategoryAsync" />
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+
+    CategoryPoco Category { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var url = $"{ Urls.BackApiCategory}/{Id}";
+        Category = await http.GetFromJsonAsync<CategoryPoco>(url);
+    }
+
+    async Task UpdateCategoryAsync()
+    {
+        var url = $"{ Urls.BackApiCategory}/{Id}";
+        await http.PutAsJsonAsync(url, Category);
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        uriHelper.NavigateTo("category/");
+    }
+}

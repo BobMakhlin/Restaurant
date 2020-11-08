@@ -1,0 +1,53 @@
+﻿@page "/category"
+
+@inject HttpClient http
+@inject IJSRuntime js
+
+<h3>Categories</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="category/create"><i class="oi oi-plus"></i> Create New</a>
+</div>
+<br />
+
+@if (Сategories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (Сategories.Count == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>IsEnabled</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Сategories)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td>@item.IsEnabled</td>
+                    <td><a class="btn btn-success" href="category/edit/@item.Id">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    List<CategoryPoco> Сategories { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Сategories = await http.GetFromJsonAsync<List<CategoryPoco>>(Urls.BackApiCategory);
+    }
+}  

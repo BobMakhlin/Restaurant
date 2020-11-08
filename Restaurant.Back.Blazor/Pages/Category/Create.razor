@@ -1,0 +1,19 @@
+﻿@page "/category/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+<h3>Create</h3>
+
+<Form ButtonText="Create Category" category="@category"
+      OnValidSubmit="@CategoryCreate" />
+
+@code {
+    CategoryPoco category = new CategoryPoco();
+    
+    async Task CategoryCreate()
+    {
+        await http.PostAsJsonAsync(Urls.BackApiCategory, category);
+        uriHelper.NavigateTo("category");
+    }
+}
+

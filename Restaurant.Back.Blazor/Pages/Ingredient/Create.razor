@@ -1,0 +1,19 @@
+﻿@page "/ingredient/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+<h3>Create</h3>
+
+<Form ButtonText="Create Ingredient" ingredient="@ingredient"
+      OnValidSubmit="@IngredientCreate" />
+
+@code {
+    IngredientPoco ingredient = new IngredientPoco();
+
+    async Task IngredientCreate()
+    {
+        await http.PostAsJsonAsync(Urls.BackApiIngredient, ingredient);
+        uriHelper.NavigateTo("ingredient");
+    }
+}
+

@@ -1,0 +1,39 @@
+﻿<EditForm Model="@ingredient" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Title :</label>
+        <div>
+            <InputText @bind-Value="@ingredient.Title" />
+            <ValidationMessage For="@(() => ingredient.Title)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Photo :</label>
+        <div>
+            <InputText @bind-Value="@ingredient.Photo" />
+            <ValidationMessage For="@(() => ingredient.Photo)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Price :</label>
+        <div>
+            <InputNumber @bind-Value="@ingredient.Price" />
+            <ValidationMessage For="@(() => ingredient.Price)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>IsEnabled :</label>
+        <div>
+            <InputCheckbox @bind-Value="@ingredient.IsEnabled" />
+            <ValidationMessage For="@(() => ingredient.IsEnabled)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+@code {
+    [Parameter] public IngredientPoco ingredient { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

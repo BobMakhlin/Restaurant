@@ -1,0 +1,19 @@
+﻿@page "/status/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+<h3>Create</h3>
+
+<Form ButtonText="Create status" status="@status"
+      OnValidSubmit="@StatusCreate" />
+
+@code {
+    StatusPoco status = new StatusPoco();
+
+    async Task StatusCreate()
+    {
+        await http.PostAsJsonAsync(Urls.BackApiStatus, status);
+        uriHelper.NavigateTo("status");
+    }
+}
+
