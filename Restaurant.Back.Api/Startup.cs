@@ -26,9 +26,14 @@ namespace Restaurant.Back.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            /* CORS */
+            services.AddCors();
+            /* /CORS */
+
             services.InitArchitecture();
             services.InitDb(Configuration);
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +43,16 @@ namespace Restaurant.Back.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            /* CORS */
+            app.UseCors(opts =>
+            {
+                opts.AllowAnyOrigin();
+                opts.AllowAnyHeader();
+                opts.AllowAnyMethod();
+            });
+            /* /CORS */
+
 
             app.UseHttpsRedirection();
 
