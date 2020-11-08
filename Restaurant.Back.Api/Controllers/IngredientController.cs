@@ -67,7 +67,7 @@ namespace Restaurant.Back.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<CategoryDto>> Update(int id, [FromBody] IngredientDto ingredient)
+        public async Task<ActionResult<IngredientDto>> Update(int id, [FromBody] IngredientDto ingredient)
         {
             if (id != ingredient.Id) return BadRequest();
             try
