@@ -1,0 +1,33 @@
+﻿@page "/ingredient/edit/{id:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+
+<h3>Edit</h3>
+
+<Form ButtonText="Update" ingredient="ingredient"
+      OnValidSubmit="@EditIngredient" />
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+
+    IngredientPoco ingredient = new IngredientPoco();
+
+
+    protected async override Task OnParametersSetAsync()
+    {
+        var url = $"{ Urls.BackApiIngredient}/{Id}";
+
+        ingredient = await http.GetFromJsonAsync<IngredientPoco>($"{Urls.BackApiIngredient}/{Id}");
+    }
+
+    async Task EditIngredient()
+    {
+        var url = $"{ Urls.BackApiIngredient}/{Id}";
+
+        await http.PutAsJsonAsync(url, ingredient);
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        uriHelper.NavigateTo("ingredient/");
+    }
+}

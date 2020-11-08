@@ -1,0 +1,32 @@
+﻿@page "/status/edit/{id:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+
+<h3>Edit</h3>
+
+<Form ButtonText="Update" status="Status"
+      OnValidSubmit="@EditStatus" />
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+
+    StatusPoco Status { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var url = $"{ Urls.BackApiStatus}/{Id}";
+        Status = await http.GetFromJsonAsync<StatusPoco>(url);
+    }
+
+    async Task EditStatus()
+    {
+        var url = $"{ Urls.BackApiStatus}/{Id}";
+
+        await http.PutAsJsonAsync(url, Status);
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        uriHelper.NavigateTo("status/");
+    }
+
+}

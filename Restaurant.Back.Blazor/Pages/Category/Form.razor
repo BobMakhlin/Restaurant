@@ -1,0 +1,25 @@
+﻿<EditForm Model="@category" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Title :</label>
+        <div>
+            <InputText @bind-Value="@category.Title" />
+            <ValidationMessage For="@(() => category.Title)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>IsEnabled :</label>
+        <div>
+            <InputCheckbox @bind-Value="@category.IsEnabled" />
+            <ValidationMessage For="@(() => category.IsEnabled)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+</EditForm>
+@code {
+    [Parameter] public CategoryPoco category { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
