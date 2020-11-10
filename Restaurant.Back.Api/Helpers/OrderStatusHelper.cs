@@ -23,7 +23,8 @@ namespace Restaurant.Back.Api.Helpers
                 var orderStatus = new OrderStatusDto
                 {
                     OrderId = orderId,
-                    StatusId = status.Id
+                    StatusId = status.Id,
+                    Time = DateTime.Now
                 };
 
                 await orderStatusService.AddAsync(orderStatus);

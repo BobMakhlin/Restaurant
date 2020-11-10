@@ -22,8 +22,11 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
             (
                 ce =>
                 {
-                    ce.CreateMap<OrderPosition, OrderPositionDto>().ReverseMap();
-                    ce.CreateMap<Product, ProductDto>().ReverseMap();
+                    ce.CreateMap<OrderPosition, OrderPositionDto>();
+                    ce.CreateMap<OrderPositionDto, OrderPosition>()
+                        .ForMember(item => item.Product, opt => opt.Ignore());
+
+                    ce.CreateMap<Product, ProductDto>();
 
                     ce.AddExpressionMapping();
                 }

@@ -20,18 +20,21 @@ namespace Restaurant.Back.Api.Controllers
         ICrudService<OrderDto, int> m_ordersService;
         ICrudService<OrderStatusDto, int> m_orderStatusService;
         ICrudService<StatusDto, int> m_statusesService;
+        ICrudService<OrderPositionDto, int> m_orderPositionService;
         #endregion
 
         public OrderController
         (
             ICrudService<OrderDto, int> ordersService,
             ICrudService<OrderStatusDto, int> orderStatusService,
-            ICrudService<StatusDto, int> statusesService
+            ICrudService<StatusDto, int> statusesService,
+            ICrudService<OrderPositionDto, int> orderPositionService
         )
         {
             m_ordersService = ordersService;
             m_orderStatusService = orderStatusService;
             m_statusesService = statusesService;
+            m_orderPositionService = orderPositionService;
         }
 
 
@@ -63,7 +66,7 @@ namespace Restaurant.Back.Api.Controllers
             }
         }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<ActionResult<OrderDto>> AddOrder(OrderDto order)
         {
             var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
@@ -72,16 +75,23 @@ namespace Restaurant.Back.Api.Controllers
             {
                 var insertedOrder = await m_ordersService.AddAsync(order);
 
-                var helper = new OrderStatusHelper(m_orderStatusService);
-                await helper.AddStatusesAsync(insertedOrder.Id, order.Statuses);
+                var statusHelper = new OrderStatusHelper(m_orderStatusService);
+                await statusHelper.AddStatusesAsync(insertedOrder.Id, order.Statuses);
+
+                //Не используется т.к. работает Automapper
+                var orderPositionHelper = new OrderPositionHelper(m_orderPositionService);
+                await orderPositionHelper.AddOrderPositionAsync(insertedOrder.Id, order.OrderPosition);
+
+                var target = await m_ordersService.GetAsync(insertedOrder.Id);
+
 
                 transaction.Complete();
 
-                return CreatedAtAction(nameof(GetOrder), new { id = insertedOrder.Id }, insertedOrder);
+                return CreatedAtAction(nameof(GetOrder), new { id = target.Id }, target);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex);
             }
             finally
             {
@@ -89,7 +99,7 @@ namespace Restaurant.Back.Api.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<OrderDto>> UpdateOrder(int id, OrderDto order)
         {
             if (id != order.Id)
@@ -102,15 +112,23 @@ namespace Restaurant.Back.Api.Controllers
             {
                 await m_ordersService.UpdateAsync(order);
 
-                var helper = new OrderStatusHelper(m_orderStatusService);
-                await helper.DeleteStatusesAsync(order.Id);
-                await helper.AddStatusesAsync(order.Id, order.Statuses);
+                //Не используется т.к. работает Automapper
+
+                var orderPositionHelper = new OrderPositionHelper(m_orderPositionService);
+                await orderPositionHelper.DeleteOrderPositionAsync(order.Id);
+                await orderPositionHelper.AddOrderPositionAsync(order.Id, order.OrderPosition);
+
+                var statusHelper = new OrderStatusHelper(m_orderStatusService);
+                await statusHelper.DeleteStatusesAsync(order.Id);
+                await statusHelper.AddStatusesAsync(order.Id, order.Statuses);
+
+                var target = await m_ordersService.GetAsync(id);
 
                 transaction.Complete();
 
-                return Ok(order);
+                return Ok(target);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -121,3 +139,5 @@ namespace Restaurant.Back.Api.Controllers
         }
     }
 }
+
+//{ "Не удалось вставить значение NULL в столбец \"Title\", таблицы \"RestaurantBack.dbo.Product\"; в столбце запрещены значения NULL. Ошибка в INSERT.\r\nВыполнение данной инструкции было прервано."}
