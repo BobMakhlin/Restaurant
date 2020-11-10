@@ -26,10 +26,7 @@
 
     public async Task CreateProductAsync()
     {
-        m_product.Category = null;
-
         await HttpClient.PostAsJsonAsync(Urls.BackApiProduct, m_product);
-
 
         NavigationManager.NavigateTo("product");
     }
@@ -38,7 +35,8 @@
     {
         m_product = new ProductPoco()
         {
-            Ingredients = new List<IngredientPoco>()
+            Ingredients = new List<IngredientPoco>(),
+            Category = new CategoryPoco()
         };
 
         m_categories = await HttpClient.GetFromJsonAsync<List<CategoryPoco>>

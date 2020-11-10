@@ -38,7 +38,7 @@
         <div class="form-group">
             <label for="category-input">Category</label>
 
-            <select id="category-input" class="form-control" @bind="@Product.CategoryId">
+            <select id="category-input" class="form-control" @bind="@Product.Category.Id">
                 @foreach (var category in Categories)
                 {
                     <option value="@category.Id">@category.Title</option>
@@ -63,7 +63,6 @@
         </div>
 
         @{
-            Console.WriteLine(Product.Ingredients.Count);
             if (Product.Ingredients == null) { }
             else if (Product.Ingredients.Count == 0)
             {
