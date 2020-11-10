@@ -13,5 +13,8 @@ namespace Restaurant.Back.Blazor.Data
         public const string BackApiOrder = BackApi + "/order";
         public const string BackApiStatus = BackApi + "/status";
         public const string BackApiProduct = BackApi + "/product";
+
+        public const string FrontApi = "https://localhost:44390/api";
+        public const string FrontApiMenu = FrontApi + "/menu";
     }
 }
