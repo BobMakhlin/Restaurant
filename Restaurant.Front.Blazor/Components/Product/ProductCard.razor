@@ -1,0 +1,19 @@
+﻿@using Models
+
+<div class="card card-product" id="card-@Model.Id">
+    <div class="card-body text-center">
+        <img class="card-img-top" src="./img/products/@Model.Photo" />
+        @foreach (var item in Model.Labels)
+        {
+            <span class="badge badge-secondary">@item.Title</span>
+        }
+        <h6>@Model.Title</h6>
+        <h3>@Math.Round(Model.Price, 2) грн</h3>
+        <button type="button" class="btn btn-secondary">В корзину</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProductPoco Model { get; set; }
+}

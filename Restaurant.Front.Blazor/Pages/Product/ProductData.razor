@@ -1,0 +1,17 @@
+﻿@using Models
+@using Restaurant.Front.Blazor.Components.Products
+
+@page "/product"
+
+@inject HttpClient HttpClient
+
+<ProductsList Products="@Products" />
+
+@code {
+    private List<ProductPoco> Products { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await HttpClient.GetFromJsonAsync<List<ProductPoco>>("https://localhost:44390/api/product");
+    }
+}
