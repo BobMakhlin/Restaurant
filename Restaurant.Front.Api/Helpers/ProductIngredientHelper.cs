@@ -43,5 +43,11 @@ namespace Restaurant.Front.Api.Helpers
                 await m_productIngredientService.DeleteAsync(item);
             }
         }
+
+        public async Task UpdateIngredientsAsync(int productId, List<IngredientDto> ingredients)
+        {
+            await DeleteIngredientsAsync(productId);
+            await AddIngredientsAsync(productId, ingredients);
+        }
     }
 }
