@@ -27,16 +27,28 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
                     ce.CreateMap<Category, CategoryDto>().ReverseMap();
                     ce.CreateMap<ProductIngredient, ProductIngredientDto>().ReverseMap();
 
+
                     ce.CreateMap<Product, ProductDto>()
                         .ForMember
-                            (item => 
-                                item.Ingredients,
-                                opt => opt.MapFrom
-                                (
-                                    p => p.ProductIngredient.Select(pi => pi.Ingredient)
-                                )
-                            );
-                    ce.CreateMap<ProductDto, Product>();
+                        (
+                            item => item.Ingredients,
+                            opt => opt.MapFrom
+                            (
+                                p => p.ProductIngredient.Select(pi => pi.Ingredient)
+                            )
+                        );
+
+                    ce.CreateMap<ProductDto, Product>()
+                        .ForMember(item => item.Category, opt => opt.Ignore())
+
+                        .ForMember
+                        (
+                            item => item.CategoryId,
+                            opt => opt.MapFrom
+                            (
+                                p => p.Category.Id
+                            )
+                        );
 
 
 
