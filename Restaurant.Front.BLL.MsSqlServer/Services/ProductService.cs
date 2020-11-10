@@ -46,7 +46,17 @@ namespace Restaurant.Front.BLL.MsSqlServer.Services
                                 )
                             );
 
-                    ce.CreateMap<ProductDto, Product>();
+                    ce.CreateMap<ProductDto, Product>()
+                        .ForMember(item => item.Category, opt => opt.Ignore())
+
+                        .ForMember
+                        (
+                            item => item.CategoryId,
+                            opt => opt.MapFrom
+                            (
+                                p => p.Category.Id
+                            )
+                        );
 
 
                     ce.AddExpressionMapping();
