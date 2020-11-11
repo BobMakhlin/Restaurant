@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Restaurant.Back.BLL.Models;
 using Restaurant.Back.BLL.Services.Common;
-using Restaurant.Back.DAL.MsSqlServer.Models;
 
 namespace Restaurant.Back.Api.Controllers
 {
@@ -14,16 +14,16 @@ namespace Restaurant.Back.Api.Controllers
     [ApiController]
     public class OrderPositionController : ControllerBase
     {
-        ICrudService<OrderPosition, int> orderPositionService;
+        ICrudService<OrderPositionDto, int> orderPositionService;
 
-        public OrderPositionController(ICrudService<OrderPosition, int> orderPositionService)
+        public OrderPositionController(ICrudService<OrderPositionDto, int> orderPositionService)
         {
             this.orderPositionService = orderPositionService;
         }
 
         #region GetAll by GET
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderPosition>>> GetAll()
+        public async Task<ActionResult<IEnumerable<OrderPositionDto>>> GetAll()
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Restaurant.Back.Api.Controllers
         #region Get by GET
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<OrderPosition>> Get(int id)
+        public async Task<ActionResult<OrderPositionDto>> Get(int id)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Restaurant.Back.Api.Controllers
 
         #region Add by POST
         [HttpPost]
-        public async Task<ActionResult<OrderPosition>> Add([FromBody] OrderPosition orderPosition)
+        public async Task<ActionResult<OrderPositionDto>> Add([FromBody] OrderPositionDto orderPosition)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Restaurant.Back.Api.Controllers
         #region Update by PUT
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<OrderPosition>> Update(int id, [FromBody] OrderPosition orderPosition)
+        public async Task<ActionResult<OrderPositionDto>> Update(int id, [FromBody] OrderPositionDto orderPosition)
         {
             if (id != orderPosition.Id) return BadRequest();
             try
