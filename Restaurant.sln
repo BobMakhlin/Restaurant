@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.DAL.MsSqlS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.Api", "Restaurant.Front.Api\Restaurant.Front.Api.csproj", "{10B75081-CD81-4EF0-A32C-0F79F60E2FF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Front.Blazor", "Restaurant.Front.Blazor\Restaurant.Front.Blazor.csproj", "{0BE95A6B-14DA-4F37-AB1C-461787CEFB50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurant.Front.Blazor", "Restaurant.Front.Blazor\Restaurant.Front.Blazor.csproj", "{0BE95A6B-14DA-4F37-AB1C-461787CEFB50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
