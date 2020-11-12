@@ -31,6 +31,12 @@ namespace Restaurant.Back.Infrastructure.Initializers.Custom.MsSqlServer
 
             services.AddScoped<ICrudService<ProductDto, int>, ProductService>();
             services.AddScoped<ICrudRepository<Product, int>, ProductRepository>();
+
+            services.AddScoped<ICrudService<OrderInfoDto, int>, OrderInfoService>();
+            services.AddScoped<ICrudRepository<OrderInfo, int>, OrderInfoRepository>();
+
+            services.AddScoped<ICrudService<OrderPositionDto, int>, OrderPositionService>();
+            services.AddScoped<ICrudRepository<OrderPosition, int>, OrderPositionRepository>();
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Restaurant.Front.BLL.Models
         public string Photo { get; set; }
         public double Weight { get; set; }
         public decimal Price { get; set; }
-        public int CategoryId { get; set; }
         public bool IsEnabled { get; set; }
 
 

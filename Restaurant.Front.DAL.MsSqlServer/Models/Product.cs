@@ -32,6 +32,8 @@ namespace Restaurant.Front.DAL.MsSqlServer.Models
         [InverseProperty("Product")]
         public virtual Category Category { get; set; }
         [InverseProperty("Product")]
+        public virtual ICollection<OrderPosition> OrderPosition { get; set; }
+        [InverseProperty("Product")]
         public virtual ICollection<ProductIngredient> ProductIngredient { get; set; }
         [InverseProperty("Product")]
         public virtual ICollection<ProductLabel> ProductLabel { get; set; }
