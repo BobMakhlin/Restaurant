@@ -49,6 +49,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Product = await httpClient.GetFromJsonAsync<ProductPoco>("https://localhost:44390/api/product/" + Id);
+        var url = $"{Urls.FrontApiProduct}/{Id}";
+        Product = await httpClient.GetFromJsonAsync<ProductPoco>(url);
     }
 }
