@@ -49,9 +49,8 @@ namespace Restaurant.Front.Api.Controllers
             }
         }
 
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<OrderInfoDto>>> GetOrderInfo(int id)
+        public async Task<ActionResult<OrderInfoDto>> GetOrderInfo(int id)
         {
             try
             {
@@ -64,6 +63,29 @@ namespace Restaurant.Front.Api.Controllers
 
 
                 return Ok(order);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("CurrentCart/{userId}")]
+        public async Task<ActionResult<OrderInfoDto>> GetCurrentCart(Guid userId)
+        {
+            try
+            {
+                var cart = await m_ordersService
+                    .Where(order => order.UserId == userId && !order.IsFinished)
+                    .FirstOrDefaultAsync();
+
+                if (cart == null)
+                {
+                    return NotFound();
+                }
+
+
+                return Ok(cart);
             }
             catch (Exception)
             {
@@ -103,7 +125,6 @@ namespace Restaurant.Front.Api.Controllers
             }
         }
 
-
         [HttpPut("{id}")]
         public async Task<ActionResult<OrderInfoDto>> UpdateOrderInfo(int id, OrderInfoDto order)
         {
@@ -137,7 +158,6 @@ namespace Restaurant.Front.Api.Controllers
                 transaction.Dispose();
             }
         }
-
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOrderInfo(int id)
