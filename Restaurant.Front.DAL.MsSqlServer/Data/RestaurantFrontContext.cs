@@ -22,6 +22,8 @@ namespace Restaurant.Front.DAL.MsSqlServer.Data
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductIngredient> ProductIngredient { get; set; }
         public virtual DbSet<ProductLabel> ProductLabel { get; set; }
+        public virtual DbSet<OrderInfo> OrderInfo { get; set; }
+        public virtual DbSet<OrderPosition> OrderPosition { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,6 +60,21 @@ namespace Restaurant.Front.DAL.MsSqlServer.Data
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ProductIn__Produ__33D4B598");
+            });
+
+            modelBuilder.Entity<OrderPosition>(entity =>
+            {
+                entity.HasOne(d => d.OrderInfo)
+                    .WithMany(p => p.OrderPosition)
+                    .HasForeignKey(d => d.OrderInfoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__OrderPosi__Order__398D8EEE");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderPosition)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__OrderPosi__Produ__3A81B327");
             });
 
             modelBuilder.Entity<ProductLabel>(entity =>
