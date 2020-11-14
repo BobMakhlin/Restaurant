@@ -136,6 +136,24 @@ app {
     top: 0.5rem;
 }
 
+
+.hidden-link {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.badge-orange {
+    background: #FDC89A;
+    color: black;
+}
+
+.btn-orange {
+    background: #fc9e4e;
+    letter-spacing: 0.45px;
+}
+
+
+
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
         display: none;

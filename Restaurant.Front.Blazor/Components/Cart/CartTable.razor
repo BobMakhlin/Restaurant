@@ -1,0 +1,131 @@
+﻿@inject HttpClient httpClient
+@inject NavigationManager navManager
+
+<style>
+    .vertical-center td, .vertical-center th {
+        vertical-align: middle;
+    }
+
+    #btn-clear {
+        font-size: 1.25em;
+    }
+</style>
+
+
+@{
+    if (Order == null || Order.OrderPosition.Count == 0)
+    {
+        <p>Your cart is empty...</p>
+    }
+    else
+    {
+        <button id="btn-clear" class="btn btn-secondary float-right mb-4" @onclick="RemoveAllProductsAsync">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+
+        <table class="table vertical-center">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var position in Order.OrderPosition)
+                {
+                    var total = position.Amount * position.ProductPrice;
+
+                    <tr>
+                        <td>@position.ProductTitle</td>
+                        <td>@position.ProductPrice.ToString("#") ₴</td>
+                        <td>
+                            <input class="form-control" type="number" value="@position.Amount" min="1" @onchange="@((args) => ChangeProductAmountAsync(args, position))" />
+                        </td>
+                        <td>@total.ToString("#") ₴</td>
+
+                        <td>
+                            <button class="btn btn-default" @onclick="@(() => RemoveProductAsync(position))">
+                                <img src="/img/ico/delete-btn.png" height="15" width="15" />
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+
+        var grandTotal = Order.OrderPosition
+            .Select(op => op.ProductPrice * op.Amount)
+            .Sum();
+
+        string grandTotalString = grandTotal.ToString("#");
+
+
+        <div class="d-flex flex-row-reverse bg-dark text-white">
+            <div class="py-3 px-5 text-right">
+                <div class="mb-2">Grand Total</div>
+                <div class="h2 font-weight-light">@grandTotalString ₴</div>
+            </div>
+        </div>
+
+        <hr class="mt-5 mb-3" />
+
+        <div class="order-details">
+            <OrderDetailsForm Order="@Order" OnValidSubmit="@SendOrder" />
+        </div>
+    }
+}
+
+
+@code {
+    [Parameter]
+    public OrderPoco Order { get; set; }
+
+
+    private async Task ChangeProductAmountAsync(ChangeEventArgs args, OrderPositionPoco orderPosition)
+    {
+        var valueString = (string)args.Value;
+        var value = int.Parse(valueString);
+
+        orderPosition.Amount = value;
+
+
+        var url = $"{Urls.FrontApiOrderPosition}/{orderPosition.Id}";
+        await httpClient.PutAsJsonAsync(url, orderPosition);
+    }
+
+    private async Task RemoveProductAsync(OrderPositionPoco orderPosition)
+    {
+        Order.OrderPosition.Remove(orderPosition);
+
+        var url = $"{Urls.FrontApiOrderPosition}/{orderPosition.Id}";
+        await httpClient.DeleteAsync(url);
+    }
+
+    private async Task RemoveAllProductsAsync()
+    {
+        foreach (var position in Order.OrderPosition)
+        {
+            var url = $"{Urls.FrontApiOrderPosition}/{position.Id}";
+            await httpClient.DeleteAsync(url);
+        }
+
+        Order.OrderPosition = new List<OrderPositionPoco>();
+    }
+
+    private async Task SendOrder()
+    {
+        Order.IsFinished = true;
+
+        await httpClient.PostAsJsonAsync(Urls.BackApiCart, Order);
+        await httpClient.PutAsJsonAsync($"{Urls.FrontApiOrderInfo}/{Order.Id}", Order);
+
+
+        navManager.NavigateTo("product");
+    }
+}

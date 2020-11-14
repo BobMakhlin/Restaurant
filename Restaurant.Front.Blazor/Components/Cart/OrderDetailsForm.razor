@@ -1,0 +1,55 @@
+﻿<EditForm Model="@Order" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="deliveryTimeInput">Delivery time</label>
+        <div>
+            <InputDate id="deliveryTimeInput" class="form-control" @bind-Value="@Order.DeliveryTime" />
+            <ValidationMessage For="@(() => Order.DeliveryTime)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="nameInput">Name</label>
+        <div>
+            <InputText id="nameInput" class="form-control" @bind-Value="@Order.CustomerName" />
+            <ValidationMessage For="@(() => Order.CustomerName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="addressInput">Address</label>
+        <div>
+            <InputText id="addressInput" class="form-control" @bind-Value="@Order.CustomerAddress" />
+            <ValidationMessage For="@(() => Order.CustomerAddress)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="phoneInput">Phone</label>
+        <div>
+            <InputText id="phoneInput" class="form-control" @bind-Value="@Order.CustomerPhone" />
+            <ValidationMessage For="@(() => Order.CustomerPhone)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="commentInput">Comment</label>
+        <div>
+            <InputTextArea id="commentInput" class="form-control" @bind-Value="@Order.Comment" />
+            <ValidationMessage For="@(() => Order.Comment)" />
+        </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary mb-4">Send</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public OrderPoco Order { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+}

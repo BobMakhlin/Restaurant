@@ -1,28 +1,41 @@
-﻿@using Models
+﻿@inject CartHelper cartHelper
 
 <style>
     .card-product__label {
         margin-right: 0.25em;
+        font-size: 0.9em;
+    }
+
+    .card-product__title {
+        font-family: "Pelmeshka", "sans-serif";
+    }
+
+    .card {
+        border: none;
+        background: inherit;
     }
 </style>
 
 
 <div class="card card-product" id="card-@Model.Id">
     <div class="card-body text-center">
+
         <a href="product/details/@Model.Id">
             <img class="card-img-top" src="./img/products/@Model.Photo" />
         </a>
 
-        <div class="card-product__labels mb-4">
+        <div class="card-product__labels">
             @foreach (var item in Model.Labels)
             {
-                <span class="card-product__label badge badge-secondary">@item.Title</span>
+                <span class="card-product__label badge badge-orange">@item.Title</span>
             }
         </div>
 
-        <h6>@Model.Title</h6>
-        <h3>@Model.Price.ToString("#") ГРН</h3>
-        <button type="button" class="btn btn-secondary">В корзину</button>
+        <h4 class="mb-4 mt-4 card-product__title">@Model.Title</h4>
+        <h3>@Model.Price.ToString("#") ₴</h3>
+
+        <button type="button" class="btn btn-orange text-uppercase" @onclick="@(() => cartHelper.AddProductToCart(Model.Id))">В корзину</button>
+
     </div>
 </div>
 

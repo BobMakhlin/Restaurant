@@ -1,5 +1,4 @@
-﻿@using Models
-@using Restaurant.Front.Blazor.Components.Product
+﻿@using Restaurant.Front.Blazor.Components.Product
 
 <div class="container">
     <div class="row" id="row-employees">
@@ -19,7 +18,7 @@
                 {
                     if (item.IsEnabled && item.Photo != null)
                     {
-                        <div class="col-3 mt-3">
+                        <div class="col-4 mt-3">
                             <ProductCard Model="@item" />
                         </div>
                     }

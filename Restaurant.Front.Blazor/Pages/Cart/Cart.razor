@@ -1,0 +1,45 @@
+﻿@using Restaurant.Front.Blazor.Components.Cart;
+
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+
+@page "/cart"
+
+
+
+@{
+    if (!m_isPageLoaded)
+    {
+        <Loading />
+    }
+    else
+    {
+        <CartTable Order="m_order" />
+    }
+}
+
+
+
+@code
+{
+    private string m_userId;
+    private OrderPoco m_order;
+    private bool m_isPageLoaded;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_userId = await jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
+        var url = $"{Urls.FrontApiCurrentCart}/{m_userId}";
+
+
+        var response = await httpClient.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            m_order = await httpClient.GetFromJsonAsync<OrderPoco>(url);
+        }
+
+        m_isPageLoaded = true;
+    }
+}
