@@ -7,7 +7,7 @@ namespace Restaurant.Back.Api.Models
 {
     public class CartPoco
     {
-        public List<OrderPositionPoco> OrderPositions { get; set; }
+        public List<OrderPositionPoco> OrderPosition { get; set; }
         public DateTime DeliveryTime { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
