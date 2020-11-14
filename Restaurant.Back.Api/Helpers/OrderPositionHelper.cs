@@ -21,9 +21,15 @@ namespace Restaurant.Back.Api.Helpers
         {
             foreach (var item in orderPositionDtos)
             {
-                item.OrderId = orderId;
+                var position = new OrderPositionDto
+                {
+                    OrderId = orderId,
+                    Amount = item.Amount,
+                    ProductId = item.ProductId
+                };
 
-                await orderPositionService.AddAsync(item);
+
+                await orderPositionService.AddAsync(position);
             }
         }
 

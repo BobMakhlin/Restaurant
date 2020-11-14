@@ -16,26 +16,25 @@ namespace Restaurant.Back.Api.Helpers
             this.orderStatusService = orderStatusService;
         }
 
-        public async Task AddStatusesAsync(int orderId, IEnumerable<StatusDto> statuses)
+        public async Task AddOrderStatusAsync(int orderId, IEnumerable<OrderStatusDto> orderStatusDtos)
         {
-            foreach(var status in statuses)
+            foreach (var item in orderStatusDtos)
             {
-                var orderStatus = new OrderStatusDto
+                var status = new OrderStatusDto
                 {
                     OrderId = orderId,
-                    StatusId = status.Id,
-                    Time = DateTime.Now
+                    Time = item.Time,
+                    StatusId = item.StatusId
                 };
-
-                await orderStatusService.AddAsync(orderStatus);
+                await orderStatusService.AddAsync(status);
             }
         }
 
-        public async Task DeleteStatusesAsync(int orderId)
+        public async Task DeleteOrderStatusAsync(int orderId)
         {
             var orderStatus = await orderStatusService.Where(item => item.OrderId == orderId).ToListAsync();
-            
-            foreach(var status in orderStatus)
+
+            foreach (var status in orderStatus)
             {
                 await orderStatusService.DeleteAsync(status);
             }

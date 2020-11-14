@@ -134,7 +134,7 @@ namespace Restaurant.Back.DAL.MsSqlServer.Data
 
             modelBuilder.Entity<Status>(entity =>
             {
-                entity.Property(e => e.Time).HasColumnType("date");
+                //entity.Property(e => e.Time).HasColumnType("date");
 
                 entity.Property(e => e.Title)
                     .IsRequired()

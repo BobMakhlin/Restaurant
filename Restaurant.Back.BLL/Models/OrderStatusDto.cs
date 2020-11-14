@@ -8,5 +8,9 @@ namespace Restaurant.Back.BLL.Models
         public int StatusId { get; set; }
         public int OrderId { get; set; }
         public DateTime Time { get; set; }
+
+
+
+        public string StatusTitle { get; set; }
     }
 }

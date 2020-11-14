@@ -14,6 +14,6 @@ namespace Restaurant.Back.BLL.Models
         public string Comment { get; set; }
 
         public List<OrderPositionDto> OrderPosition { get; set; }        
-        public List<StatusDto> Statuses { get; set; }
+        public List<OrderStatusDto> OrderStatus { get; set; }
     }
 }

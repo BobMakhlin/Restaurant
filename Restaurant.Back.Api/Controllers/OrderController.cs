@@ -76,7 +76,7 @@ namespace Restaurant.Back.Api.Controllers
                 var insertedOrder = await m_ordersService.AddAsync(order);
 
                 var statusHelper = new OrderStatusHelper(m_orderStatusService);
-                await statusHelper.AddStatusesAsync(insertedOrder.Id, order.Statuses);
+                await statusHelper.AddOrderStatusAsync(insertedOrder.Id, order.OrderStatus);
 
                 //Не используется т.к. работает Automapper
                 var orderPositionHelper = new OrderPositionHelper(m_orderPositionService);
@@ -119,8 +119,8 @@ namespace Restaurant.Back.Api.Controllers
                 await orderPositionHelper.AddOrderPositionAsync(order.Id, order.OrderPosition);
 
                 var statusHelper = new OrderStatusHelper(m_orderStatusService);
-                await statusHelper.DeleteStatusesAsync(order.Id);
-                await statusHelper.AddStatusesAsync(order.Id, order.Statuses);
+                await statusHelper.DeleteOrderStatusAsync(order.Id);
+                await statusHelper.AddOrderStatusAsync(order.Id, order.OrderStatus);
 
                 var target = await m_ordersService.GetAsync(id);
 
