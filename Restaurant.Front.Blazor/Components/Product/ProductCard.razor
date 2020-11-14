@@ -1,22 +1,31 @@
 ﻿@using Models
 
-@if(Model.IsEnabled && Model.Photo != null)
-{
-    <div class="card card-product" id="card-@Model.Id">
-        <div class="card-body text-center">
-            <a href="product/details/@Model.Id">
-                <img class="card-img-top" src="./img/products/@Model.Photo" />
-            </a>            
+<style>
+    .card-product__label {
+        margin-right: 0.25em;
+    }
+</style>
+
+
+<div class="card card-product" id="card-@Model.Id">
+    <div class="card-body text-center">
+        <a href="product/details/@Model.Id">
+            <img class="card-img-top" src="./img/products/@Model.Photo" />
+        </a>
+
+        <div class="card-product__labels mb-4">
             @foreach (var item in Model.Labels)
             {
-                <span class="badge badge-secondary m-md-3">@item.Title</span>
+                <span class="card-product__label badge badge-secondary">@item.Title</span>
             }
-            <h6>@Model.Title</h6>
-            <h3>@Math.Round(Model.Price, 0) ГРН</h3>
-            <button type="button" class="btn btn-secondary">В корзину</button>
         </div>
+
+        <h6>@Model.Title</h6>
+        <h3>@Model.Price.ToString("#") ГРН</h3>
+        <button type="button" class="btn btn-secondary">В корзину</button>
     </div>
-}
+</div>
+
 
 @code {
     [Parameter]

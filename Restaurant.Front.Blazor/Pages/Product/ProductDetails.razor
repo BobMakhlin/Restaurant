@@ -1,7 +1,48 @@
 ﻿@using Models
 
+<style>
+    .product__img {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .product__title {
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Pelmeshka', 'sans-serif';
+    }
+
+    .product__labels {
+        text-align: center;
+    }
+
+    .product__badge {
+        font-size: 1em;
+        margin: 0;
+    }
+
+    .product-card {
+        margin: 0 auto;
+        width: 22em;
+    }
+
+    .product-card__bottom-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .product__weight {
+        font-size: 1.15em;
+        font-weight: bold;
+    }
+</style>
+
+
 @page "/product/details/{id:int}"
 @inject HttpClient httpClient
+
+
 
 @if (Product == null)
 {
@@ -9,37 +50,82 @@
 }
 else
 {
-    <h3>@Product.Title</h3>
-    <div class="row">
-        <div class="col-md-3">
-            <img class="img-fluid" src="./img/products/@Product.Photo" />
-            @foreach (var item in Product.Labels)
-            {
-                <span class="badge badge-secondary m-md-3">@item.Title</span>
-            }
-        </div>
-        <div class="col-md-2">
-            <div class="card">
-                <h3>@Math.Round(Product.Price, 0) ГРН</h3>
-                <button type="button" class="btn-sm btn-secondary">В корзину</button>
-                <p>@Product.Description</p>
-                <h5>Общий вес - @Product.Weight</h5>
+    var ingredientsNames = Product.Ingredients
+        .Select(ingredient => ingredient.Title);
+
+    var productContent = String.Join(", ", ingredientsNames);
+
+
+    <div class="container">
+        <div class="row product">
+
+            <div class="col-4">
+                <img class="img-fluid product__img" src="./img/products/@Product.Photo" />
+
+                <div class="product__labels mt-2">
+                    @foreach (var label in Product.Labels)
+                    {
+                        <div class="product__label mb-1">
+                            <p class="product__badge badge badge-secondary">@label.Title</p>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-    </div>
-    <h5 class="mb-5">Ингредиенты:</h5>
-    @foreach (var item in Product.Ingredients)
-    {
-        <div class="row">
-            <div class="col-2">
-                <h6>@item.Title</h6>
-            </div>
-            <div class="col-1">
-                <img class="img-fluid" src="./img/ingredient/@item.Photo" />
+            <div class="col-8">
+                <h2 class="product__title">@Product.Title</h2>
+
+                <div class="product-card card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@Product.Price.ToString("#.##") ₴</h5>
+                        <hr />
+
+                        <p class="card-text">@productContent</p>
+                        
+                        <div class="product-card__bottom-line">
+                            <button class="btn btn-dark">To cart</button>
+                            
+                            <span class="product__weight">@Product.Weight.ToString("#.##") г</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-    }
+    </div>
+
+
+
+    @*<h3>@Product.Title</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-fluid" src="./img/products/@Product.Photo" />
+                @foreach (var item in Product.Labels)
+                {
+                    <span class="badge badge-secondary m-md-3">@item.Title</span>
+                }
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <h3>@Math.Round(Product.Price, 0) ГРН</h3>
+                    <button type="button" class="btn-sm btn-secondary">В корзину</button>
+                    <p>@Product.Description</p>
+                    <h5>Общий вес - @Product.Weight</h5>
+                </div>
+            </div>
+        </div>
+        <h5 class="mb-5">Ингредиенты:</h5>
+        @foreach (var item in Product.Ingredients)
+        {
+            <div class="row">
+                <div class="col-2">
+                    <h6>@item.Title</h6>
+                </div>
+                <div class="col-1">
+                    <img class="img-fluid" src="./img/ingredient/@item.Photo" />
+                </div>
+
+            </div>
+        }*@
 }
 
 @code {

@@ -17,9 +17,12 @@
             {
                 foreach (var item in Products)
                 {
-                    <div class="col-3 mt-3">
-                        <ProductCard Model="@item"/>
-                    </div>
+                    if (item.IsEnabled && item.Photo != null)
+                    {
+                        <div class="col-3 mt-3">
+                            <ProductCard Model="@item" />
+                        </div>
+                    }
                 }
             }
         }
