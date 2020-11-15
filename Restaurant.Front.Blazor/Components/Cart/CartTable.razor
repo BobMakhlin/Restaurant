@@ -133,6 +133,9 @@
     {
         Order.IsFinished = true;
 
+        await jsRuntime.InvokeVoidAsync("cart.totalCount.toZero");
+
+
         await httpClient.PostAsJsonAsync(Urls.BackApiCart, Order);
         await httpClient.PutAsJsonAsync($"{Urls.FrontApiOrderInfo}/{Order.Id}", Order);
 
