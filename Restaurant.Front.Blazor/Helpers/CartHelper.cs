@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
+
 
 namespace Restaurant.Front.Blazor.Helpers
 {
@@ -14,13 +16,20 @@ namespace Restaurant.Front.Blazor.Helpers
     {
         #region Fields
         IJSRuntime m_jsRuntime;
+        ILocalStorageService m_localStorage;
         HttpClient m_httpClient;
         #endregion
 
         #region Constructor
-        public CartHelper(IJSRuntime jsRuntime, HttpClient httpClient)
+        public CartHelper
+        (
+            IJSRuntime jsRuntime, 
+            ILocalStorageService localStorage, 
+            HttpClient httpClient
+        )
         {
             m_jsRuntime = jsRuntime;
+            m_localStorage = localStorage;
             m_httpClient = httpClient;
         }
         #endregion
@@ -32,7 +41,7 @@ namespace Restaurant.Front.Blazor.Helpers
             await m_jsRuntime.InvokeVoidAsync("cart.totalCount.increase");
 
 
-            var userId = await m_jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
+            var userId = await m_localStorage.GetItemAsStringAsync(Keys.UserIdLocalStorageKey);
 
             if (userId == null)
             {
@@ -48,7 +57,7 @@ namespace Restaurant.Front.Blazor.Helpers
         private async Task AddProductToGuestCart(int productId)
         {
             var userGuid = Guid.NewGuid();
-            await m_jsRuntime.InvokeVoidAsync("localStorage.setItem", Keys.UserIdLocalStorageKey, userGuid.ToString());
+            await m_localStorage.SetItemAsync(Keys.UserIdLocalStorageKey, userGuid.ToString());
 
             await CreateCart(userGuid, productId);
         }

@@ -2,6 +2,8 @@
 
 @inject IJSRuntime jsRuntime
 @inject HttpClient httpClient
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 
 @page "/cart"
 
@@ -29,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        m_userId = await jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
+        m_userId = await localStorage.GetItemAsStringAsync(Keys.UserIdLocalStorageKey);
         var url = $"{Urls.FrontApiCurrentCart}/{m_userId}";
 
 

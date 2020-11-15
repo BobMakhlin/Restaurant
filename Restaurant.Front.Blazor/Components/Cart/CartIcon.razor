@@ -1,5 +1,6 @@
 ﻿@inject HttpClient httpClient
 @inject IJSRuntime jsRuntime
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 <style>
@@ -30,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var userId = await jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
+        var userId = await localStorage.GetItemAsStringAsync(Keys.UserIdLocalStorageKey);
         if (userId == null) return;
 
 
