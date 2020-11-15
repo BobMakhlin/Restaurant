@@ -1,5 +1,6 @@
 ﻿@inject HttpClient httpClient
 @inject NavigationManager navManager
+@inject IJSRuntime jsRuntime
 
 <style>
     .vertical-center td, .vertical-center th {
@@ -95,6 +96,9 @@
         orderPosition.Amount = value;
 
 
+        await UpdateTotalCount();
+
+
         var url = $"{Urls.FrontApiOrderPosition}/{orderPosition.Id}";
         await httpClient.PutAsJsonAsync(url, orderPosition);
     }
@@ -103,12 +107,19 @@
     {
         Order.OrderPosition.Remove(orderPosition);
 
+        await UpdateTotalCount();
+
+
+
         var url = $"{Urls.FrontApiOrderPosition}/{orderPosition.Id}";
         await httpClient.DeleteAsync(url);
     }
 
     private async Task RemoveAllProductsAsync()
     {
+        await jsRuntime.InvokeVoidAsync("cart.totalCount.toZero");
+
+
         foreach (var position in Order.OrderPosition)
         {
             var url = $"{Urls.FrontApiOrderPosition}/{position.Id}";
@@ -127,5 +138,14 @@
 
 
         navManager.NavigateTo("product");
+    }
+
+
+    private async Task UpdateTotalCount()
+    {
+        var totalCount = Order.OrderPosition
+            .Sum(position => position.Amount);
+
+        await jsRuntime.InvokeVoidAsync("cart.totalCount.set", totalCount);
     }
 }

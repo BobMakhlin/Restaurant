@@ -1,0 +1,48 @@
+﻿@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+
+
+<style>
+    .cart-link {
+        position: relative;
+    }
+
+    .cart-link__count {
+        font-size: 0.3em;
+        position: absolute;
+        top: -5px;
+        right: -1.5px;
+    }
+</style>
+
+
+<a class="cart-link hidden-link" href="/cart">
+    <i class="cart-link__icon fas fa-shopping-cart text-secondary"></i>
+
+    <span class="cart-link__count badge badge-pill badge-orange">@m_totalCount</span>
+</a>
+
+
+@code
+{
+    private int m_totalCount = 0;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
+        if (userId == null) return;
+
+
+        var url = $"{Urls.FrontApiCurrentCart}/{userId}";
+
+        var response = await httpClient.GetAsync(url);
+        if (!response.IsSuccessStatusCode) return;
+
+        var currentOrder = await response.Content.ReadFromJsonAsync<OrderPoco>();
+
+
+        m_totalCount = currentOrder.OrderPosition
+            .Sum(position => position.Amount);
+    }
+}

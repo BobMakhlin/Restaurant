@@ -29,6 +29,9 @@ namespace Restaurant.Front.Blazor.Helpers
         #region Methods
         public async Task AddProductToCart(int productId)
         {
+            await m_jsRuntime.InvokeVoidAsync("cart.totalCount.increase");
+
+
             var userId = await m_jsRuntime.InvokeAsync<string>("localStorage.getItem", Keys.UserIdLocalStorageKey);
 
             if (userId == null)

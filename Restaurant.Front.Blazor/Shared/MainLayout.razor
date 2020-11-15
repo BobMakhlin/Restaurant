@@ -1,21 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using Restaurant.Front.Blazor.Components.Cart;
+@inherits LayoutComponentBase
 
 <style>
     .top-row {
     }
-
-    .top-row__icons {
-        font-size: 2em;
-    }
-
-    .top-row__link {
-        color: #6c757d;
-    }
-
-        .top-row__link:hover {
-            color: #343a40;
-        }
-
 
     .top-row__logo {
         height: 100%;
@@ -24,6 +12,10 @@
         .top-row__logo img {
             height: 120%;
         }
+
+    .top-row__icons {
+        font-size: 2em;
+    }
 </style>
 
 
@@ -41,7 +33,7 @@
         </div>
 
         <div class="ml-md-auto top-row__icons">
-            <a class="top-row__link" href="/cart"><i class="fas fa-shopping-cart"></i></a>
+            <CartIcon />
         </div>
     </div>
 
