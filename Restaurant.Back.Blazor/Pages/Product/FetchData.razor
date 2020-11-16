@@ -81,7 +81,7 @@
         var checkboxValue = (bool)args.Value;
         product.IsEnabled = checkboxValue;
 
-        var url = $"{Urls.BackApiProduct}/{product.Id}";
+        var url = $"{Urls.BackApiProduct}/Partially/{product.Id}";
         await HttpClient.PutAsJsonAsync(url, product);
     }
 }
