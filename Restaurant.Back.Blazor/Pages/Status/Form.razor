@@ -3,7 +3,7 @@
     <div class="form-group">
         <label>Title :</label>
         <div>
-            <InputText @bind-Value="@status.Title" />
+            <InputText class="form-control" @bind-Value="@status.Title" />
             <ValidationMessage For="@(() => status.Title)" />
         </div>
     </div>

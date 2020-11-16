@@ -1,0 +1,114 @@
+﻿@page "/order/details/{id:int}"
+
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+@{
+    if (IsPageLoaded())
+    {
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="pull-center">Order #@m_order.Id</h3>
+                <p>Status: @m_order.OrderStatus.LastOrDefault().StatusTitle</p>
+                <hr>
+                <div class="row">
+                    <div class="col-4">
+                        <address>
+                            <strong>Ordered To:</strong><br>
+                            @m_order.CustomerName<br>
+                            @m_order.CustomerPhone<br>
+                            @m_order.CustomerAddress<br>
+                        </address>
+                    </div>
+
+                    <div class="col-4">
+                        <address>
+                            <strong>Payment Method:</strong><br>
+                            Cash<br>
+                            @m_order.CustomerPhone<br>
+                        </address>
+                    </div>
+                    <div class="col-4 text-right">
+                        <address>
+                            <strong>Order Date:</strong><br>
+                            @m_order.OrderTime<br>
+                            @m_order.DeliveryTime<br><br>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Item</strong></td>
+                                        <td class="text-center"><strong>Price</strong></td>
+                                        <td class="text-center"><strong>Amount</strong></td>
+                                        <td class="text-right"><strong>Totals</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        decimal total = 0;
+                                        decimal grandTotal = m_order.OrderPosition.Select(op => op.ProductPrice * op.Amount).Sum();
+                                        }
+                                    @foreach (var item in m_order.OrderPosition)
+                                    {
+                                        total = @item.ProductPrice * @item.Amount;
+                                        <tr>
+                                            <td>@item.ProductTitle</td>
+                                            <td class="text-center">@item.ProductPrice</td>
+                                            <td class="text-center">@item.Amount</td>
+                                            <td class="text-right">@total</td>
+                                        </tr>
+                                    }
+
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-center"><strong>Grand Total</strong></td>
+                                        <td class="thick-line text-right">@grandTotal</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+        <Loading />
+    }
+}
+
+
+
+
+@code {
+    OrderPoco m_order;
+    
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_order = await http.GetFromJsonAsync<OrderPoco>($"{Urls.BackApiOrder}/{Id}");
+    }
+
+    private bool IsPageLoaded() => m_order != null;
+
+}

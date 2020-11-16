@@ -1,0 +1,47 @@
+﻿@page "/order/edit/{id:int}"
+
+@inject HttpClient http
+
+@inject NavigationManager uriHelper
+
+@{
+    if (IsPageLoaded())
+    {
+        <Form Order="@m_order" Statuses="m_statuses" Products="m_products" OnValidSubmit="@EditOrderAsync" />
+    }
+    else
+    {
+        <Loading />
+    }
+}
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    OrderPoco m_order;
+    List<StatusPoco> m_statuses;
+    List<ProductPoco> m_products;
+
+    async Task EditOrderAsync()
+    {
+        var url = $"{Urls.BackApiOrder}/{Id}";
+        await http.PutAsJsonAsync(url, m_order);
+        uriHelper.NavigateTo("order");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_order = await http.GetFromJsonAsync<OrderPoco>($"{Urls.BackApiOrder}/{Id}");
+        m_statuses = await http.GetFromJsonAsync<List<StatusPoco>>($"{Urls.BackApiStatus}");
+        m_products = await http.GetFromJsonAsync<List<ProductPoco>>($"{ Urls.BackApiProduct}");
+    }
+
+    private bool IsPageLoaded() =>
+        m_order != null
+        && m_statuses != null
+        && m_products != null;
+
+}

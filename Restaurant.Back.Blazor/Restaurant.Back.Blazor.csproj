@@ -17,4 +17,19 @@
     <Folder Include="Components\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Pages\Category\Create.razor" />
+    <None Include="Pages\Category\Edit.razor" />
+    <None Include="Pages\Category\FetchData.razor" />
+    <None Include="Pages\Category\Form.razor" />
+    <None Include="Pages\Ingredient\Create.razor" />
+    <None Include="Pages\Ingredient\Edit.razor" />
+    <None Include="Pages\Ingredient\FetchData.razor" />
+    <None Include="Pages\Ingredient\Form.razor" />
+    <None Include="Pages\Status\Create.razor" />
+    <None Include="Pages\Status\Edit.razor" />
+    <None Include="Pages\Status\FetchData.razor" />
+    <None Include="Pages\Status\Form.razor" />
+  </ItemGroup>
+
 </Project>

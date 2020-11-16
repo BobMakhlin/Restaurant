@@ -1,0 +1,190 @@
+﻿<EditForm Model="@Order" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <h5>Client information</h5>
+        <div class="row ">
+
+            <div class="form-group col-2">
+                <label>Name</label>
+                <div>
+                    <InputText class="form-control" @bind-Value="@Order.CustomerName" />
+                    <ValidationMessage For="@(() => Order.CustomerName)" />
+                </div>
+            </div>
+
+            <div class="form-group col-3">
+                <label>Address</label>
+                <div>
+                    <InputText id="address-input" class="form-control" @bind-Value="@Order.CustomerAddress" />
+                    <ValidationMessage For="@(() => Order.CustomerAddress)" />
+                </div>
+            </div>
+
+            <div class="form-group col-2">
+                <label>Phone</label>
+                <div>
+                    <InputText class="form-control" @bind-Value="@Order.CustomerPhone" />
+                    <ValidationMessage For="@(() => Order.CustomerPhone)" />
+                </div>
+            </div>
+
+            <div class="form-group col-2">
+                <label>Delivery time</label>
+                <div>
+                    <InputDate class="form-control"  @bind-Value="@Order.DeliveryTime" />
+                    <ValidationMessage For="@(() => Order.DeliveryTime)" />
+                </div>
+            </div>
+        </div>
+
+
+        <hr />
+        <div id="line-products" class="mt-2 mb-5">
+            <h5>Choice Products</h5>
+
+            <div class="d-flex mt-3 mb-3">
+                <select @bind="@m_selectedProductId" class="form-control">
+                    @foreach (var item in Products)
+                    {
+                        <option value=@item.Id>@item.Title</option>
+                    }
+                </select>
+
+                <button type="button" @onclick="@AddProduct" class="btn btn-primary ml-2 text-uppercase">Add</button>
+            </div>
+
+            @{
+                if (Order.OrderPosition == null) { }
+                else if (Order.OrderPosition.Count == 0)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Product</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Amount</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Cost</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Product</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Amount</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Cost</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @{ int count = 0;}
+                                    @foreach (var item in Order.OrderPosition)
+                                    {
+                                        string total = $"{(item.Amount * item.ProductPrice):f2}";
+                                        string productPrice = $"{@item.ProductPrice:f2}";
+                                        count++;
+
+                                        <tr>
+                                            <td>@count</td>
+                                            <td>@item.ProductTitle</td>
+                                            <td>
+                                                <InputNumber class="form-control" name="amount" Min="1" Max="10" @bind-Value="@item.Amount" />
+                                            </td>
+                                            <td>@productPrice</td>
+                                            <td>@total</td>
+                                            <td>
+                                                <button type="button" @onclick="@(() => DeleteOrderPosition(item))" class="btn navbar-toggle">
+                                                    <img src="/img/ico/delete_button.png" height="15" width="15" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+
+            @{
+                decimal grandTotal = Order.OrderPosition.Select(op => op.ProductPrice * op.Amount).Sum();
+                string grandTotalString = $"{grandTotal:f2}";
+            }
+
+            <div class="d-flex flex-row-reverse bg-dark text-white">
+                <div class="py-3 px-5 text-right">
+                    <div class="mb-2">Grand Total</div>
+                    <div class="h2 font-weight-light"> @grandTotalString</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-success mb-5">Save</button>
+</EditForm>
+
+@code {
+    private int m_selectedProductId;
+    private DateTime m_deliveryTime = DateTime.Now.AddHours(1);
+
+    [Parameter]
+    public List<StatusPoco> Statuses { get; set; }
+
+    [Parameter]
+    public List<ProductPoco> Products { get; set; }
+
+    [Parameter]
+    public OrderPoco Order { get; set; }
+
+    [Parameter]
+    public string ButtonText { get; set; } = "Save";
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    private void AddProduct()
+    {
+        if (Order.OrderPosition.Select(op => op.ProductId).Contains(m_selectedProductId))
+        {
+            if (Order.OrderPosition.FirstOrDefault(op => op.ProductId == m_selectedProductId).Amount<10)
+            {
+                Order.OrderPosition.FirstOrDefault(op => op.ProductId == m_selectedProductId).Amount++;
+            }
+
+        }
+        else
+        {
+            OrderPositionPoco orderPosition = new OrderPositionPoco
+            {
+                OrderId = Order.Id,
+                ProductId = m_selectedProductId,
+                ProductTitle = Products.FirstOrDefault(p => p.Id == m_selectedProductId).Title,
+                ProductPrice = Products.FirstOrDefault(p => p.Id == m_selectedProductId).Price,
+                Amount = 1
+            };
+            Order.OrderPosition.Add(orderPosition);
+        }
+    }
+
+
+    private void DeleteOrderPosition(OrderPositionPoco orderPosition)
+    {
+        Order.OrderPosition.Remove(orderPosition);
+    }
+}
+

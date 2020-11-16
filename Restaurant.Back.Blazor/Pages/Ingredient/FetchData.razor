@@ -26,7 +26,7 @@ else
                 <th>Title</th>
                 <th>Photo</th>
                 <th>Price</th>
-                <th>IsEnabled</th>
+                <th>Enabled</th>
                 <th></th>
             </tr>
         </thead>
@@ -38,8 +38,10 @@ else
                     <td>@item.Title</td>
                     <td>@item.Photo</td>
                     <td>@item.Price</td>
-                    <td>@item.IsEnabled</td>
-                    <td><a class="btn btn-success" href="ingredient/edit/@item.Id">Edit</a></td>
+                    <td>
+                        <input type="checkbox" checked="@item.IsEnabled" @onchange="args => OnCheckboxValueChanged(item, args)" />
+                    </td>
+                    <td><a class="btn btn-primary" href="ingredient/edit/@item.Id">Edit</a></td>
                 </tr>
             }
         </tbody>
@@ -54,4 +56,14 @@ else
     {
         Ingredients = await http.GetFromJsonAsync<List<IngredientPoco>>(Urls.BackApiIngredient);
     }
+
+    private async Task OnCheckboxValueChanged(IngredientPoco ingredient, ChangeEventArgs args)
+    {
+        var checkboxValue = (bool)args.Value;
+        ingredient.IsEnabled = checkboxValue;
+
+        var url = $"{Urls.BackApiIngredient}/{ingredient.Id}";
+        await http.PutAsJsonAsync(url, ingredient);
+    }
+
 }  

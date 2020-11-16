@@ -24,7 +24,7 @@ else
             <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>IsEnabled</th>
+                <th>Enabled</th>
                 <th></th>
             </tr>
         </thead>
@@ -34,8 +34,10 @@ else
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Title</td>
-                    <td>@item.IsEnabled</td>
-                    <td><a class="btn btn-success" href="category/edit/@item.Id">Edit</a></td>
+                    <td>
+                        <input type="checkbox" checked="@item.IsEnabled" @onchange="args => OnCheckboxValueChanged(item, args)" />
+                    </td>
+                    <td><a class="btn btn-primary" href="category/edit/@item.Id">Edit</a></td>
                 </tr>
             }
         </tbody>
@@ -49,5 +51,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         Сategories = await http.GetFromJsonAsync<List<CategoryPoco>>(Urls.BackApiCategory);
+    }
+
+    private async Task OnCheckboxValueChanged(CategoryPoco category, ChangeEventArgs args)
+    {
+        var checkboxValue = (bool)args.Value;
+        category.IsEnabled = checkboxValue;
+
+        var url = $"{Urls.BackApiCategory}/{category.Id}";
+        await http.PutAsJsonAsync(url, category);
     }
 }  

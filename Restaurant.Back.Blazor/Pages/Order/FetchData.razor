@@ -1,0 +1,222 @@
+﻿
+@page "/order"
+@inject HttpClient HttpClient
+
+<div class="row">
+    <a class="btn btn-success m-2" href="order/create">
+        <i class="oi oi-plus"></i>
+        <span class="ml-2">Create New</span>
+    </a>
+    <a class="btn btn-success m-2" href="order/current">
+        <i class="oi oi-plus"></i>
+        <span class="ml-2">Current orders</span>
+    </a>
+    <button class="btn btn-success m-2" @onclick="@(() => FilterOrdersByStatus(1))">
+        <i class="oi oi-plus"></i>
+        <span class="ml-2">Filter by status</span>
+    </button>
+</div>
+
+
+<div class="mt-1">
+
+    @if (Orders == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (Orders.Count == 0)
+    {
+        <p>No Records Found.</p>
+    }
+    else
+    {
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <b>ID</b> <i class="fa fa-fw fa-sort" @onclick="@(() => SortOrderById())"></i>
+                    </th>
+                    <th>
+                        <b>Delivery Time</b> <i class="fa fa-fw fa-sort" @onclick="@(() => SortOrderByTime())"></i>
+                    </th>
+                    <th>
+                        <b>Customer Address</b> <i class="fa fa-sort" aria-hidden="true" @onclick="@(() => SortOrderByAddress())"></i>
+                    </th>
+                    <th>
+                        
+                    </th>
+
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Orders)
+                {
+                    var currentStatus = item.OrderStatus
+                        .OrderBy(os => os.Time)
+                        .LastOrDefault();
+
+                    <tr class="orderStatus-@currentStatus.StatusId">
+                        <td>@item.Id</td>
+                        <td>
+                            @item.DeliveryTime
+                        </td>
+                        <td>@item.CustomerAddress</td>
+                        <td>
+                            @if (Statuses != null)
+                            {
+                                <select class="form-control" @onchange="args => ChangeStatus(item, args)">
+
+                                    @foreach (var status in Statuses)
+                                    {
+                                        if (currentStatus.StatusId == status.Id)
+                                        {
+                                            <option selected value="@status.Id">@status.Title</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@status.Id">@status.Title</option>
+                                        }
+                                    }
+
+                                </select>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="order/details/@item.Id">Details</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="order/edit/@item.Id">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+
+
+
+
+@code
+{
+    List<OrderPoco> Orders { get; set; }
+    List<StatusPoco> Statuses { get; set; }
+    List<OrderStatusPoco> OrderStatuses { get; set; }
+
+    private bool isSortedOrderByTime = false;
+    private bool isSortedOrderById = false;
+    private bool isSortedOrderByAddress = false;
+
+    string currentStatus = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await HttpClient
+            .GetFromJsonAsync<List<OrderPoco>>(Urls.BackApiOrder);
+        Statuses = await HttpClient
+            .GetFromJsonAsync<List<StatusPoco>>(Urls.BackApiStatus);
+        OrderStatuses = await HttpClient
+            .GetFromJsonAsync<List<OrderStatusPoco>>(Urls.BackApiOrderStatus);
+
+    }
+
+    async Task ChangeStatus(OrderPoco order, ChangeEventArgs e)
+    {
+        var valueString = (string)e.Value;
+        var value = int.Parse(valueString);
+
+
+        var orderStatus = new OrderStatusPoco
+        {
+            OrderId = order.Id,
+            StatusId = value,
+            Time = DateTime.Now
+
+        };
+
+        await HttpClient.PostAsJsonAsync(Urls.BackApiOrderStatus, orderStatus);
+    }
+
+    private void SortOrderById()
+    {
+        if (isSortedOrderById == false)
+        {
+            Orders = Orders
+                .OrderByDescending(order => order.Id)
+                .ToList();
+            isSortedOrderById = true;
+        }
+        else
+        {
+            Orders = Orders
+                .OrderBy(order => order.Id)
+                .ToList();
+            isSortedOrderById = false;
+        }
+    }
+
+
+    private void SortOrderByTime()
+    {
+        if (isSortedOrderByTime == false)
+        {
+            Orders = Orders
+                .OrderByDescending(order => order.DeliveryTime)
+                .ToList();
+            isSortedOrderByTime = true;
+        }
+        else
+        {
+            Orders = Orders
+                .OrderBy(order => order.DeliveryTime)
+                .ToList();
+            isSortedOrderByTime = false;
+        }
+    }
+
+    private void SortOrderByAddress()
+    {
+        if (isSortedOrderByAddress == false)
+        {
+            Orders = Orders
+                .OrderByDescending(order => order.CustomerAddress)
+                .ToList();
+            isSortedOrderByAddress = true;
+        }
+        else
+        {
+            Orders = Orders
+                .OrderBy(order => order.CustomerAddress)
+                .ToList();
+            isSortedOrderByAddress = false;
+        }
+    }
+
+    private void SortOrderByStatus()
+    {
+        Orders = Orders
+            .OrderByDescending(order => order.OrderStatus)
+            .ToList();
+    }
+
+    private void FilterOrdersByStatus(int statusId)
+    {
+        var query = (
+            from order in Orders
+
+            let currentStatus = order.OrderStatus
+                            .OrderBy(os => os.Time)
+                            .LastOrDefault()
+
+            where currentStatus.StatusId == statusId
+
+            select order
+        );
+
+        Orders = query.ToList();
+    }
+}

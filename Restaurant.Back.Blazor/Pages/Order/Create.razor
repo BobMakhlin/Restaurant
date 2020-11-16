@@ -1,0 +1,50 @@
+﻿@page "/order/create"
+
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+@{
+    if (IsPageLoaded())
+    {
+        <Form Order="@m_order" Statuses="m_statuses" Products="m_products" OnValidSubmit="@CreateOrderAsync" />
+    }
+    else
+    {
+        <Loading />
+    }
+}
+
+
+@code {
+    OrderPoco m_order;
+    List<StatusPoco> m_statuses;
+    List<ProductPoco> m_products;
+
+
+
+    async Task CreateOrderAsync()
+    {
+        m_order.OrderStatus = new List<OrderStatusPoco> { new OrderStatusPoco { StatusId = 2, Time = DateTime.Now } };
+        m_order.OrderTime = DateTime.Now;
+
+        await http.PostAsJsonAsync(Urls.BackApiOrder, m_order);
+        uriHelper.NavigateTo("order");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        m_order = new OrderPoco
+        {
+            OrderPosition = new List<OrderPositionPoco>()
+        };
+
+        m_statuses = await http.GetFromJsonAsync<List<StatusPoco>>($"{Urls.BackApiStatus}");
+        m_products = await http.GetFromJsonAsync<List<ProductPoco>>($"{ Urls.BackApiProduct}");
+    }
+
+    private bool IsPageLoaded() =>
+        m_order != null
+        && m_statuses != null
+        && m_products != null;
+
+}
