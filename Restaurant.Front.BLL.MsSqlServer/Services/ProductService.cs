@@ -34,7 +34,9 @@ namespace Restaurant.Front.BLL.MsSqlServer.Services
                                 item => item.Ingredients,
                                 opt => opt.MapFrom
                                 (
-                                    p => p.ProductIngredient.Select(item => item.Ingredient)
+                                    p => p.ProductIngredient
+                                        .Select(productIngredient => productIngredient.Ingredient)
+                                        .Where(ingredient => ingredient.IsEnabled)
                                 )
                             )
                         .ForMember
@@ -42,7 +44,8 @@ namespace Restaurant.Front.BLL.MsSqlServer.Services
                                 item => item.Labels,
                                 opt => opt.MapFrom
                                 (
-                                    p => p.ProductLabel.Select(item => item.Label)
+                                    p => p.ProductLabel
+                                        .Select(item => item.Label)
                                 )
                             );
 
