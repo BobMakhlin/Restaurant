@@ -12,23 +12,23 @@ namespace Restaurant.Back.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderPositionController : ControllerBase
+    public class OrderStatusController : ControllerBase
     {
-        ICrudService<OrderPositionDto, int> orderPositionService;
+        ICrudService<OrderStatusDto, int> orderStatusService;
 
-        public OrderPositionController(ICrudService<OrderPositionDto, int> orderPositionService)
+        public OrderStatusController(ICrudService<OrderStatusDto, int> orderStatusService)
         {
-            this.orderPositionService = orderPositionService;
+            this.orderStatusService = orderStatusService;
         }
 
         #region GetAll by GET
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderPositionDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<OrderStatusDto>>> GetAll()
         {
             try
             {
-                var orderPositions = await orderPositionService.GetAll().ToListAsync();
-                return Ok(orderPositions);
+                var orderStatuses = await orderStatusService.GetAll().ToListAsync();
+                return Ok(orderStatuses);
             }
             catch (Exception ex)
             {
@@ -40,13 +40,13 @@ namespace Restaurant.Back.Api.Controllers
         #region Get by GET
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<OrderPositionDto>> Get(int id)
+        public async Task<ActionResult<OrderStatusDto>> Get(int id)
         {
             try
             {
-                var orderPosition = await orderPositionService.GetAsync(id);
-                if (orderPosition == null) return NotFound();
-                return Ok(orderPosition);
+                var orderStatus = await orderStatusService.GetAsync(id);
+                if (orderStatus == null) return NotFound();
+                return Ok(orderStatus);
             }
             catch (Exception ex)
             {
@@ -57,12 +57,12 @@ namespace Restaurant.Back.Api.Controllers
 
         #region Add by POST
         [HttpPost]
-        public async Task<ActionResult<OrderPositionDto>> Add([FromBody] OrderPositionDto orderPosition)
+        public async Task<ActionResult<OrderStatusDto>> Add([FromBody] OrderStatusDto orderStatus)
         {
             try
             {
-                await orderPositionService.AddAsync(orderPosition);
-                return CreatedAtAction(nameof(Get), new { id = orderPosition.Id }, orderPosition);
+                await orderStatusService.AddAsync(orderStatus);
+                return CreatedAtAction(nameof(Get), new { id = orderStatus.Id }, orderStatus);
             }
             catch (Exception ex)
             {
@@ -74,13 +74,13 @@ namespace Restaurant.Back.Api.Controllers
         #region Update by PUT
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<OrderPositionDto>> Update(int id, [FromBody] OrderPositionDto orderPosition)
+        public async Task<ActionResult<OrderStatusDto>> Update(int id, [FromBody] OrderStatusDto orderStatus)
         {
-            if (id != orderPosition.Id) return BadRequest();
+            if (id != orderStatus.Id) return BadRequest();
             try
             {
-                await orderPositionService.UpdateAsync(orderPosition);
-                return Ok(orderPosition);
+                await orderStatusService.UpdateAsync(orderStatus);
+                return Ok(orderStatus);
             }
             catch (Exception ex)
             {

@@ -106,6 +106,7 @@ namespace Restaurant.Back.Api.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductDto>> PutProduct(int id, ProductDto product)
         {
@@ -141,6 +142,30 @@ namespace Restaurant.Back.Api.Controllers
             finally
             {
                 transaction.Dispose();
+            }
+        }
+
+        [HttpPut("Partially/{id}")]
+        public async Task<ActionResult<ProductDto>> PutProductPartially(int id, ProductDto product)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+
+
+            try
+            {
+                await m_productsService.UpdateAsync(product);
+
+                var insertedProduct = await m_productsService.GetAsync(product.Id);
+
+
+                return Ok(insertedProduct);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
             }
         }
     }

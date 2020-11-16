@@ -12,7 +12,6 @@ namespace Restaurant.Back.DAL.MsSqlServer.Models
 
         public int Id { get; set; }
         public string Title { get; set; }
-        public DateTime Time { get; set; }
 
         public virtual ICollection<OrderStatus> OrderStatus { get; set; }
     }

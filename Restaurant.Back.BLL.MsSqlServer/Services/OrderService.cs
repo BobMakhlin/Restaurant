@@ -24,27 +24,23 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
             (
                 ce =>
                 {
-                    ce.CreateMap<Status, StatusDto>().ReverseMap();                    
-                    ce.CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
+                    ce.CreateMap<OrderStatus, OrderStatusDto>()
+                        .ForMember(item => item.StatusTitle, opt => opt.MapFrom(item => item.Status.Title));
+                    ce.CreateMap<OrderStatusDto, OrderStatus>()
+                        .ForMember(item => item.Status, opt => opt.Ignore());
 
-                    
                     ce.CreateMap<OrderPosition, OrderPositionDto>()
                         .ForMember(item => item.ProductTitle, opt => opt.MapFrom(item => item.Product.Title))
                         .ForMember(item => item.ProductPrice, opt => opt.MapFrom(item => item.Product.Price));
-
                     ce.CreateMap<OrderPositionDto, OrderPosition>()
-                        .ForMember(item => item.Product, opt => opt.Ignore());
+                        .ForMember(item => item.Product, opt => opt.Ignore())
+                        .ForMember(item => item.Id, opt => opt.Ignore());
 
-
-                    ce.CreateMap<Order, OrderDto>()
-                        .ForMember(item => item.Statuses, opt => opt.MapFrom
-                            (
-                                p => p.OrderStatus.Select(pi => pi.Status)
-                            ));
+                    ce.CreateMap<Order, OrderDto>();
                     ce.CreateMap<OrderDto, Order>()
-                        .ForMember(item => item.OrderPosition, opt => opt.Ignore());
-
-
+                        .ForMember(item => item.Id, opt => opt.Ignore())
+                        .ForMember(item => item.OrderPosition, opt => opt.Ignore())
+                        .ForMember(item => item.OrderStatus, opt => opt.Ignore());
 
                     ce.AddExpressionMapping();
                 }
