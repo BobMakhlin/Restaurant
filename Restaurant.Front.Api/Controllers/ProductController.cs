@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using LinqKit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,18 @@ namespace Restaurant.Front.Api.Controllers
         {
             try
             {
-                var products = await m_productService.GetAll().ToListAsync();
+                var predicateBuilder = PredicateBuilder.New<ProductDto>();
+
+                var predicate = predicateBuilder
+                    .And(product => product.IsEnabled)
+                    .And(product => product.Category.IsEnabled);
+
+
+                var products = await m_productService
+                    .Where(predicate)
+                    .ToListAsync();
+
+
                 return Ok(products);
             }
             catch (Exception ex)
