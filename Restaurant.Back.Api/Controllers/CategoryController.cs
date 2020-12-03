@@ -56,8 +56,8 @@ namespace Restaurant.Back.Api.Controllers
         {
             try
             {
-                await categoryService.AddAsync(category);
-                return CreatedAtAction(nameof(Get), new { id = category.Id }, category);
+                var insertedCategory = await categoryService.AddAsync(category);
+                return CreatedAtAction(nameof(Get), new { id = insertedCategory.Id }, insertedCategory);
             }
             catch (Exception e)
             {
