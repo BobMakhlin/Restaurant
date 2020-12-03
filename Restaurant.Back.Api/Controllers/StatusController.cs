@@ -56,8 +56,8 @@ namespace Restaurant.Back.Api.Controllers
         {
             try
             {
-                await statusService.AddAsync(status);
-                return CreatedAtAction(nameof(Get), new { id = status.Id }, status);
+                var insertedStatus = await statusService.AddAsync(status);
+                return CreatedAtAction(nameof(Get), new { id = insertedStatus.Id }, insertedStatus);
             }
             catch (Exception e)
             {
@@ -72,8 +72,8 @@ namespace Restaurant.Back.Api.Controllers
             if (id != status.Id) return BadRequest();
             try
             {
-                await statusService.UpdateAsync(status);
-                return Ok(status);
+                var updatedStatus = await statusService.UpdateAsync(status);
+                return Ok(updatedStatus);
             }
             catch (Exception e)
             {

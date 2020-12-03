@@ -56,8 +56,8 @@ namespace Restaurant.Back.Api.Controllers
         {
             try
             {
-                await ingredientService.AddAsync(ingredient);
-                return CreatedAtAction(nameof(Get), new { id = ingredient.Id }, ingredient);
+                var insertedIngredient = await ingredientService.AddAsync(ingredient);
+                return CreatedAtAction(nameof(Get), new { id = insertedIngredient.Id }, insertedIngredient);
             }
             catch (Exception e)
             {
@@ -72,8 +72,8 @@ namespace Restaurant.Back.Api.Controllers
             if (id != ingredient.Id) return BadRequest();
             try
             {
-                await ingredientService.UpdateAsync(ingredient);
-                return Ok(ingredient);
+                var updatedIngredient = await ingredientService.UpdateAsync(ingredient);
+                return Ok(updatedIngredient);
             }
             catch (Exception e)
             {

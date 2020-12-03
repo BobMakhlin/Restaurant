@@ -61,8 +61,8 @@ namespace Restaurant.Back.Api.Controllers
         {
             try
             {
-                await orderPositionService.AddAsync(orderPosition);
-                return CreatedAtAction(nameof(Get), new { id = orderPosition.Id }, orderPosition);
+                var insertedOrderPosition = await orderPositionService.AddAsync(orderPosition);
+                return CreatedAtAction(nameof(Get), new { id = insertedOrderPosition.Id }, insertedOrderPosition);
             }
             catch (Exception ex)
             {
@@ -79,8 +79,8 @@ namespace Restaurant.Back.Api.Controllers
             if (id != orderPosition.Id) return BadRequest();
             try
             {
-                await orderPositionService.UpdateAsync(orderPosition);
-                return Ok(orderPosition);
+                var updatedOrderPosition = await orderPositionService.UpdateAsync(orderPosition);
+                return Ok(updatedOrderPosition);
             }
             catch (Exception ex)
             {
