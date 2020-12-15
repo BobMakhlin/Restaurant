@@ -38,7 +38,6 @@ namespace Restaurant.Back.BLL.MsSqlServer.Services
 
                     ce.CreateMap<Order, OrderDto>();
                     ce.CreateMap<OrderDto, Order>()
-                        .ForMember(item => item.Id, opt => opt.Ignore())
                         .ForMember(item => item.OrderPosition, opt => opt.Ignore())
                         .ForMember(item => item.OrderStatus, opt => opt.Ignore());
 
